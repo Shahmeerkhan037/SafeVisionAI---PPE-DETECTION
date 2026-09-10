@@ -1,0 +1,288 @@
+# SafeVisionAI
+
+## AI-Based Real-Time Worker Safety Monitoring System
+
+SafeVisionAI is a computer vision-based worker safety monitoring system designed to detect PPE compliance violations from video streams or camera feeds.
+
+The system uses YOLO-based object detection to identify workers and safety equipment, records detected violations, and provides a dashboard for reviewing violation events with screenshots.
+
+## Features
+
+* PPE detection using YOLO
+* Worker safety rule monitoring
+* Video file testing
+* Webcam/camera input support
+* IP/network camera or video source support
+* Violation detection and logging
+* Automatic screenshot capture for violations
+* Violation records displayed on a Streamlit dashboard
+* Employee details management
+* Real-time monitoring support
+
+## Project Workflow
+
+The system follows this general workflow:
+
+```text
+Video / Camera Source
+        ↓
+Video Processing
+        ↓
+YOLO Object Detection
+        ↓
+Safety Rule Checking
+        ↓
+Violation Detection
+        ↓
+Violation Logging
+        ↓
+Screenshot Capture
+        ↓
+Streamlit Dashboard
+```
+
+## Project Setup
+
+### 1. Clone the Repository
+
+```bash
+git clone <repository-url>
+cd SafeVisionAI
+```
+
+### 2. Create a Virtual Environment
+
+It is recommended to use a virtual environment for the project.
+
+```bash
+python -m venv .venv
+```
+
+Activate it on Windows:
+
+```bash
+.venv\Scripts\activate
+```
+
+### 3. Install Requirements
+
+Install the required Python libraries:
+
+```bash
+pip install -r requirements.txt
+```
+
+The main dependencies include:
+
+* Ultralytics
+* OpenCV
+* NumPy
+* Pandas
+* Streamlit
+* Pillow
+
+## Model Configuration
+
+Before running the detection pipeline, open:
+
+```text
+test_pipeline.py
+```
+
+Inside this file, enter the path to your trained YOLO model.
+
+Example:
+
+```python
+MODEL_PATH = "models/best.pt"
+```
+
+You also need to specify the video source.
+
+### Using a Demo Video
+
+Enter the path to your video file:
+
+```python
+VIDEO_SOURCE = "demo_video.mp4"
+```
+
+You can also provide the full path:
+
+```python
+VIDEO_SOURCE = r"C:\path\to\demo_video.mp4"
+```
+
+### Using a Camera
+
+To use the default camera/webcam:
+
+```python
+VIDEO_SOURCE = 0
+```
+
+For another camera index, you can use a different number such as:
+
+```python
+VIDEO_SOURCE = 1
+```
+
+### Using a Video/Camera URL
+
+If your implementation supports a network video stream, the source can be provided as a URL:
+
+```python
+VIDEO_SOURCE = "YOUR_VIDEO_SOURCE_URL"
+```
+
+## Employee Details
+
+Create a folder named:
+
+```text
+pages
+```
+
+Inside the `pages` folder, place:
+
+```text
+employee_details.py
+```
+
+The structure should look like:
+
+```text
+SafeVisionAI/
+│
+├── dashboard.py
+├── test_pipeline.py
+├── requirements.txt
+├── README.md
+│
+├── pages/
+│   └── employee_details.py
+│
+└── models/
+    └── best.pt
+```
+
+## Running the Dashboard
+
+Run the Streamlit dashboard using:
+
+```bash
+streamlit run dashboard.py
+```
+
+After starting Streamlit, open the URL provided in the terminal/browser.
+
+The dashboard allows you to review recorded safety violations and their associated screenshots.
+
+## Testing the Model
+
+After configuring the model path and video source in `test_pipeline.py`, run:
+
+```bash
+python test_pipeline.py
+```
+
+The pipeline will process the selected video or camera source and detect safety-rule violations.
+
+Detected violations will be recorded by the system.
+
+## Violation Logging
+
+When a person is detected as violating a safety rule, the violation is logged.
+
+The system records the violation along with a screenshot/evidence image.
+
+These recorded violations can then be viewed through the Streamlit dashboard.
+
+The general flow is:
+
+```text
+Person detected
+       ↓
+PPE/Safety rule checked
+       ↓
+Violation detected
+       ↓
+Violation recorded
+       ↓
+Screenshot captured
+       ↓
+Displayed on dashboard
+```
+
+## Requirements
+
+The project requires Python and the following main libraries:
+
+```text
+ultralytics
+opencv-python
+numpy
+pandas
+streamlit
+Pillow
+```
+
+Install all dependencies with:
+
+```bash
+pip install -r requirements.txt
+```
+
+## Technologies Used
+
+* Python
+* YOLO
+* Ultralytics
+* OpenCV
+* Streamlit
+* NumPy
+* Pandas
+* Pillow
+
+## Model
+
+The trained model weights are not included directly in the repository if they exceed the repository's preferred file size.
+
+The model path can be configured in:
+
+```text
+test_pipeline.py
+```
+
+For example:
+
+```python
+MODEL_PATH = "path/to/best.pt"
+```
+
+## Demo
+
+The system can be tested using:
+
+* A recorded demo video
+* A webcam
+* A supported camera/video stream URL
+
+The system processes the source, detects safety violations, records them, and makes the recorded violations available through the dashboard.
+
+## Future Improvements
+
+Potential future improvements include:
+
+* Improved PPE detection accuracy
+* More robust tracking
+* Multi-camera monitoring
+* Real-time notifications
+* Database integration
+* Advanced employee management
+* Improved violation analytics
+* Cloud-based monitoring
+
+## Author
+
+Shahmeer Mehmood
