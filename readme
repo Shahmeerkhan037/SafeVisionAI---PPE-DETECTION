@@ -2,26 +2,29 @@
 
 ## AI-Based Real-Time Worker Safety Monitoring System
 
-SafeVisionAI is a computer vision-based worker safety monitoring system designed to detect PPE compliance violations from video streams or camera feeds.
+SafeVisionAI is a computer vision-based worker safety monitoring system designed to detect PPE compliance violations from video streams and camera feeds.
 
-The system uses YOLO-based object detection to identify workers and safety equipment, records detected violations, and provides a dashboard for reviewing violation events with screenshots.
+The system uses YOLO-based object detection to identify workers and safety equipment, detect safety-rule violations, record violation events, and provide visual evidence through a Streamlit monitoring dashboard.
 
 ## Features
 
-* PPE detection using YOLO
-* Worker safety rule monitoring
+* YOLO-based PPE detection
+* Worker safety monitoring
+* Helmet detection
+* Safety vest detection
+* Safety boots detection
+* Gloves detection
+* Goggles detection
+* Safety violation detection
 * Video file testing
-* Webcam/camera input support
-* IP/network camera or video source support
-* Violation detection and logging
+* Webcam/camera support
+* Video stream/source URL support
+* Violation logging
 * Automatic screenshot capture for violations
-* Violation records displayed on a Streamlit dashboard
+* Streamlit monitoring dashboard
 * Employee details management
-* Real-time monitoring support
 
-## Project Workflow
-
-The system follows this general workflow:
+## System Workflow
 
 ```text
 Video / Camera Source
@@ -29,6 +32,8 @@ Video / Camera Source
 Video Processing
         ↓
 YOLO Object Detection
+        ↓
+Object Tracking
         ↓
 Safety Rule Checking
         ↓
@@ -41,18 +46,38 @@ Screenshot Capture
 Streamlit Dashboard
 ```
 
-## Project Setup
+## Project Structure
+
+```text
+SafeVisionAI/
+│
+├── dashboard.py
+├── test_pipeline.py
+├── data_manager.py
+├── requirements.txt
+├── README.md
+│
+├── pages/
+│   └── employee_details.py
+│
+└── models/
+    └── best.pt
+```
+
+The trained model is provided separately through the GitHub Release because of its file size.
+
+## Installation
 
 ### 1. Clone the Repository
 
 ```bash
-git clone <repository-url>
-cd SafeVisionAI
+git clone https://github.com/Shahmeerkhan037/SafeVisionAI---PPE-DETECTION.git
+cd SafeVisionAI---PPE-DETECTION
 ```
 
 ### 2. Create a Virtual Environment
 
-It is recommended to use a virtual environment for the project.
+It is recommended to use a virtual environment.
 
 ```bash
 python -m venv .venv
@@ -64,9 +89,9 @@ Activate it on Windows:
 .venv\Scripts\activate
 ```
 
-### 3. Install Requirements
+### 3. Install Dependencies
 
-Install the required Python libraries:
+Install the required Python packages:
 
 ```bash
 pip install -r requirements.txt
@@ -81,15 +106,21 @@ The main dependencies include:
 * Streamlit
 * Pillow
 
-## Model Configuration
+## Model Setup
 
-Before running the detection pipeline, open:
+The trained YOLO model is available in the **Releases** section of this GitHub repository.
+
+Download the `best.pt` model from the latest release.
+
+After downloading the model, place it wherever you prefer on your computer.
+
+Then open:
 
 ```text
 test_pipeline.py
 ```
 
-Inside this file, enter the path to your trained YOLO model.
+and enter the path to the downloaded model.
 
 Example:
 
@@ -97,39 +128,51 @@ Example:
 MODEL_PATH = "models/best.pt"
 ```
 
-You also need to specify the video source.
+You can also use an absolute path:
 
-### Using a Demo Video
+```python
+MODEL_PATH = r"C:\path\to\best.pt"
+```
 
-Enter the path to your video file:
+## Configuring the Video Source
+
+The video source is also configured in:
+
+```text
+test_pipeline.py
+```
+
+### Demo Video
+
+To test the model on a video file:
 
 ```python
 VIDEO_SOURCE = "demo_video.mp4"
 ```
 
-You can also provide the full path:
+Or use an absolute path:
 
 ```python
 VIDEO_SOURCE = r"C:\path\to\demo_video.mp4"
 ```
 
-### Using a Camera
+### Webcam
 
-To use the default camera/webcam:
+To use the default camera:
 
 ```python
 VIDEO_SOURCE = 0
 ```
 
-For another camera index, you can use a different number such as:
+For another connected camera:
 
 ```python
 VIDEO_SOURCE = 1
 ```
 
-### Using a Video/Camera URL
+### Video Stream / Camera URL
 
-If your implementation supports a network video stream, the source can be provided as a URL:
+If a supported network camera or video stream URL is available:
 
 ```python
 VIDEO_SOURCE = "YOUR_VIDEO_SOURCE_URL"
@@ -143,80 +186,82 @@ Create a folder named:
 pages
 ```
 
-Inside the `pages` folder, place:
+Inside the folder, place:
 
 ```text
 employee_details.py
 ```
 
-The structure should look like:
+The structure should be:
 
 ```text
-SafeVisionAI/
-│
-├── dashboard.py
-├── test_pipeline.py
-├── requirements.txt
-├── README.md
-│
-├── pages/
-│   └── employee_details.py
-│
-└── models/
-    └── best.pt
+pages/
+└── employee_details.py
 ```
+
+Streamlit will use this file as an additional dashboard page.
 
 ## Running the Dashboard
 
-Run the Streamlit dashboard using:
+Start the Streamlit dashboard with:
 
 ```bash
 streamlit run dashboard.py
 ```
 
-After starting Streamlit, open the URL provided in the terminal/browser.
+Streamlit will provide a local URL where the dashboard can be accessed.
 
-The dashboard allows you to review recorded safety violations and their associated screenshots.
+The dashboard displays recorded safety violations and their captured screenshots.
 
 ## Testing the Model
 
-After configuring the model path and video source in `test_pipeline.py`, run:
+After configuring `MODEL_PATH` and `VIDEO_SOURCE` inside `test_pipeline.py`, run:
 
 ```bash
 python test_pipeline.py
 ```
 
-The pipeline will process the selected video or camera source and detect safety-rule violations.
+The system will process the selected video, webcam, or supported video source.
 
-Detected violations will be recorded by the system.
+During processing, detected safety violations will be recorded.
 
-## Violation Logging
+## Violation Recording
 
-When a person is detected as violating a safety rule, the violation is logged.
+When a person is detected as violating a safety rule, the system records the violation.
 
-The system records the violation along with a screenshot/evidence image.
+A screenshot is captured as visual evidence of the violation.
 
-These recorded violations can then be viewed through the Streamlit dashboard.
+The recorded violation and its screenshot can then be viewed through the Streamlit dashboard.
 
-The general flow is:
+The overall process is:
 
 ```text
-Person detected
-       ↓
-PPE/Safety rule checked
-       ↓
-Violation detected
-       ↓
-Violation recorded
-       ↓
-Screenshot captured
-       ↓
-Displayed on dashboard
+Person Detected
+      ↓
+PPE Detection
+      ↓
+Safety Rules Checked
+      ↓
+Violation Detected
+      ↓
+Violation Logged
+      ↓
+Screenshot Captured
+      ↓
+Violation Displayed on Dashboard
 ```
 
 ## Requirements
 
-The project requires Python and the following main libraries:
+The project requires Python and the dependencies listed in `requirements.txt`.
+
+Install them using:
+
+```bash
+pip install -r requirements.txt
+```
+
+Main libraries used:
 
 ```text
 ultralytics
@@ -225,12 +270,6 @@ numpy
 pandas
 streamlit
 Pillow
-```
-
-Install all dependencies with:
-
-```bash
-pip install -r requirements.txt
 ```
 
 ## Technologies Used
@@ -244,45 +283,36 @@ pip install -r requirements.txt
 * Pandas
 * Pillow
 
-## Model
+## Model Release
 
-The trained model weights are not included directly in the repository if they exceed the repository's preferred file size.
+The trained model is distributed through the GitHub **Releases** section rather than being stored directly in the Git repository.
 
-The model path can be configured in:
-
-```text
-test_pipeline.py
-```
-
-For example:
-
-```python
-MODEL_PATH = "path/to/best.pt"
-```
+This keeps the main repository lightweight while still making the trained model available for testing and deployment.
 
 ## Demo
 
-The system can be tested using:
+SafeVisionAI can be tested using:
 
-* A recorded demo video
-* A webcam
-* A supported camera/video stream URL
+* Recorded video
+* Webcam
+* Supported network camera/video stream
 
-The system processes the source, detects safety violations, records them, and makes the recorded violations available through the dashboard.
+The system detects PPE-related safety violations, records the violation events, captures screenshots as evidence, and displays the recorded violations through the monitoring dashboard.
 
 ## Future Improvements
 
 Potential future improvements include:
 
 * Improved PPE detection accuracy
-* More robust tracking
+* More robust object tracking
 * Multi-camera monitoring
 * Real-time notifications
 * Database integration
 * Advanced employee management
-* Improved violation analytics
+* Violation analytics
 * Cloud-based monitoring
+* Improved handling of difficult lighting and occlusion conditions
 
 ## Author
 
-Shahmeer Mehmood
+**Shahmeer Mehmood**
